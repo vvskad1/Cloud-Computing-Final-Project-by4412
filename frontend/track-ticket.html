@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Ticket - FixIt Tech Solutions</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="/" style="text-decoration: none; color: inherit; font-size: 1.5rem; font-weight: 600;">🔧 FixIt Tech Solutions</a>
+            </div>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/static/new-booking.html">Book Repair</a>
+                <a href="/static/track-ticket.html" class="active">Track Ticket</a>
+                <a href="/static/login.html">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Search Section -->
+        <div class="card" style="max-width: 700px; margin: 2rem auto;">
+            <div class="card-header">
+                <h1 class="card-title">Track Your Repair Ticket</h1>
+                <p class="card-description">Enter your ticket ID or email to view repair status</p>
+            </div>
+
+            <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                <button id="searchByIdTab" class="btn btn-primary" style="flex: 1;" onclick="showTab('id')">
+                    Search by Ticket ID
+                </button>
+                <button id="searchByEmailTab" class="btn btn-outline" style="flex: 1;" onclick="showTab('email')">
+                    Search by Email
+                </button>
+            </div>
+
+            <!-- Search by ID -->
+            <div id="searchIdSection">
+                <div class="form-group">
+                    <label for="ticketId" class="form-label">Ticket ID</label>
+                    <input 
+                        type="number" 
+                        id="ticketId" 
+                        class="form-input" 
+                        placeholder="Enter ticket ID (e.g., 123)"
+                        min="1"
+                    >
+                </div>
+                <button onclick="searchByTicketId()" class="btn btn-primary" style="width: 100%;">
+                    Search Ticket
+                </button>
+            </div>
+
+            <!-- Search by Email -->
+            <div id="searchEmailSection" class="hidden">
+                <div class="form-group">
+                    <label for="customerEmail" class="form-label">Email Address</label>
+                    <input 
+                        type="email" 
+                        id="customerEmailSearch" 
+                        class="form-input" 
+                        placeholder="your.email@example.com"
+                    >
+                </div>
+                <button onclick="searchByEmail()" class="btn btn-primary" style="width: 100%;">
+                    Search Tickets
+                </button>
+            </div>
+
+            <!-- Error Message -->
+            <div id="searchError" class="alert alert-error hidden" style="margin-top: 1rem;">
+                <span id="searchErrorText"></span>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsSection" class="hidden">
+            <!-- Single Ticket Detail -->
+            <div id="ticketDetail" class="card hidden">
+                <div class="card-header">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h2 class="card-title">Ticket #<span id="detailTicketId"></span></h2>
+                        <span id="detailStatus" class="badge"></span>
+                    </div>
+                </div>
+
+                <div class="grid grid-2">
+                    <div>
+                        <h3 style="font-size: 1rem; margin-bottom: 0.5rem; color: var(--text-secondary);">Customer Information</h3>
+                        <p><strong>Name:</strong> <span id="detailCustomerName"></span></p>
+                        <p><strong>Email:</strong> <span id="detailCustomerEmail"></span></p>
+                        <p><strong>Phone:</strong> <span id="detailCustomerPhone"></span></p>
+                    </div>
+
+                    <div>
+                        <h3 style="font-size: 1rem; margin-bottom: 0.5rem; color: var(--text-secondary);">Device Information</h3>
+                        <p><strong>Device:</strong> <span id="detailDeviceType"></span></p>
+                        <p><strong>Brand:</strong> <span id="detailDeviceBrand"></span></p>
+                        <p><strong>Model:</strong> <span id="detailDeviceModel"></span></p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 1.5rem;">
+                    <h3 style="font-size: 1rem; margin-bottom: 0.5rem; color: var(--text-secondary);">Issue Description</h3>
+                    <p id="detailIssue" style="padding: 1rem; background-color: var(--bg-light); border-radius: var(--radius-md);"></p>
+                </div>
+
+                <div class="grid grid-2" style="margin-top: 1.5rem;">
+                    <div>
+                        <p><strong>Priority:</strong> <span id="detailPriority" class="badge"></span></p>
+                        <p><strong>Created:</strong> <span id="detailCreated"></span></p>
+                        <p><strong>Last Updated:</strong> <span id="detailUpdated"></span></p>
+                    </div>
+                    <div>
+                        <p><strong>Estimated Cost:</strong> $<span id="detailEstimatedCost"></span></p>
+                        <p><strong>Actual Cost:</strong> $<span id="detailActualCost"></span></p>
+                        <p id="detailCompletedRow" class="hidden"><strong>Completed:</strong> <span id="detailCompleted"></span></p>
+                    </div>
+                </div>
+
+                <!-- Ticket History -->
+                <div style="margin-top: 2rem;">
+                    <h3 style="font-size: 1.125rem; margin-bottom: 1rem; color: var(--primary-color);">Status History</h3>
+                    <div id="ticketHistory" style="padding: 1rem; background-color: var(--bg-light); border-radius: var(--radius-md);">
+                        <!-- History will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Multiple Tickets List -->
+            <div id="ticketsList" class="card hidden">
+                <div class="card-header">
+                    <h2 class="card-title">Your Tickets</h2>
+                    <p class="card-description">Found <span id="ticketsCount"></span> ticket(s)</p>
+                </div>
+
+                <div id="ticketsContainer">
+                    <!-- Tickets will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 FixIt Tech Solutions. CS 623 Final Project.</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/tracking.js"></script>
+</body>
+</html>

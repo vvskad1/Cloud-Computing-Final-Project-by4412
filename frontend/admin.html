@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - FixIt Tech Solutions</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="nav-brand">
+                <a href="/" style="text-decoration: none; color: inherit; font-size: 1.5rem; font-weight: 600;">🔧 FixIt Tech Solutions - Admin</a>
+            </div>
+            <div class="nav-links" id="adminNavbar">
+                <!-- Admin info will be inserted here by JavaScript -->
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero" style="padding: 2rem 0 1rem;">
+            <h1>Admin Dashboard</h1>
+            <p>Manage tickets, view statistics, and oversee all repair operations</p>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="grid grid-3" id="statsGrid">
+            <!-- Stats will be loaded here -->
+            <div class="stat-card">
+                <div class="stat-label">Loading...</div>
+                <div class="stat-value">--</div>
+            </div>
+        </div>
+
+        <!-- Filters Section -->
+        <div class="card mt-2">
+            <div class="card-header">
+                <h2 class="card-title">Filter Tickets</h2>
+            </div>
+
+            <div class="grid grid-3">
+                <div class="form-group">
+                    <label for="filterStatus" class="form-label">Status</label>
+                    <select id="filterStatus" class="form-select">
+                        <option value="">All Statuses</option>
+                        <option value="pending">Pending</option>
+                        <option value="diagnosed">Diagnosed</option>
+                        <option value="in_progress">In Progress</option>
+                        <option value="waiting_parts">Waiting Parts</option>
+                        <option value="completed">Completed</option>
+                        <option value="ready_pickup">Ready for Pickup</option>
+                        <option value="delivered">Delivered</option>
+                        <option value="cancelled">Cancelled</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="filterPriority" class="form-label">Priority</label>
+                    <select id="filterPriority" class="form-select">
+                        <option value="">All Priorities</option>
+                        <option value="low">Low</option>
+                        <option value="normal">Normal</option>
+                        <option value="high">High</option>
+                        <option value="urgent">Urgent</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="filterCustomer" class="form-label">Customer Name</label>
+                    <input type="text" id="filterCustomer" class="form-input" placeholder="Search by name...">
+                </div>
+            </div>
+
+            <button onclick="applyFilters()" class="btn btn-primary">Apply Filters</button>
+            <button onclick="clearFilters()" class="btn btn-outline" style="margin-left: 0.5rem;">Clear Filters</button>
+        </div>
+
+        <!-- Tickets Table -->
+        <div class="card mt-2">
+            <div class="card-header">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h2 class="card-title">All Tickets</h2>
+                        <p class="card-description">Showing <span id="ticketCount">0</span> ticket(s)</p>
+                    </div>
+                    <button onclick="loadTickets()" class="btn btn-secondary">Refresh</button>
+                </div>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Customer</th>
+                            <th>Device</th>
+                            <th>Issue</th>
+                            <th>Status</th>
+                            <th>Priority</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ticketsTableBody">
+                        <tr>
+                            <td colspan="8" style="text-align: center; padding: 2rem;">
+                                Loading tickets...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Ticket Detail Modal (Simple version) -->
+        <div id="ticketDetailModal" class="card mt-2 hidden">
+            <div class="card-header">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2 class="card-title">Ticket Details</h2>
+                    <button onclick="closeTicketDetail()" class="btn btn-outline" style="padding: 0.25rem 0.75rem;">Close</button>
+                </div>
+            </div>
+
+            <div id="ticketDetailContent">
+                <!-- Content will be loaded here -->
+            </div>
+
+            <!-- Update Status Form -->
+            <div style="border-top: 2px solid var(--border-color); padding-top: 1.5rem; margin-top: 1.5rem;">
+                <h3 style="margin-bottom: 1rem;">Update Ticket</h3>
+                <div class="grid grid-2">
+                    <div class="form-group">
+                        <label for="updateStatus" class="form-label">New Status</label>
+                        <select id="updateStatus" class="form-select">
+                            <option value="">-- Select Status --</option>
+                            <option value="pending">Pending</option>
+                            <option value="diagnosed">Diagnosed</option>
+                            <option value="in_progress">In Progress</option>
+                            <option value="waiting_parts">Waiting Parts</option>
+                            <option value="completed">Completed</option>
+                            <option value="ready_pickup">Ready for Pickup</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="updatePriority" class="form-label">Priority</label>
+                        <select id="updatePriority" class="form-select">
+                            <option value="low">Low</option>
+                            <option value="normal">Normal</option>
+                            <option value="high">High</option>
+                            <option value="urgent">Urgent</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="updateNotes" class="form-label">Notes</label>
+                    <textarea id="updateNotes" class="form-textarea" placeholder="Add notes about this update..." style="min-height: 80px;"></textarea>
+                </div>
+
+                <button onclick="updateTicket()" class="btn btn-primary">Update Ticket</button>
+            </div>
+        </div>
+
+        <!-- Customers Section -->
+        <div class="card mt-2">
+            <div class="card-header">
+                <h2 class="card-title">Customers</h2>
+                <p class="card-description">View and search all customers</p>
+            </div>
+
+            <div class="form-group">
+                <label for="customerSearch" class="form-label">Search Customers</label>
+                <input type="text" id="customerSearch" class="form-input" placeholder="Search by name or email...">
+            </div>
+
+            <button onclick="searchCustomers()" class="btn btn-primary">Search</button>
+
+            <div id="customersContainer" class="mt-2">
+                <!-- Customers will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2025 FixIt Tech Solutions. CS 623 Final Project.</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/admin.js"></script>
+</body>
+</html>

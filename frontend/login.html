@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - FixIt Tech Solutions</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <a href="/" style="text-decoration: none; color: inherit; font-size: 1.5rem; font-weight: 600;">🔧 FixIt Tech Solutions</a>
+            </div>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                <a href="/static/new-booking.html">Book Repair</a>
+                <a href="/static/track-ticket.html">Track Ticket</a>
+                <a href="/static/login.html" class="active">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Section -->
+    <section class="hero" style="min-height: calc(100vh - 80px); display: flex; align-items: center;">
+        <div class="container">
+            <div style="max-width: 500px; margin: 0 auto;">
+                <div class="card">
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <h1>Welcome Back</h1>
+                        <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+                            Sign in to your account
+                        </p>
+                    </div>
+
+                    <!-- Tab Switcher -->
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 2rem;">
+                        <button id="customerTab" class="btn btn-primary" style="flex: 1;" onclick="showTab('customer')">
+                            Customer Login
+                        </button>
+                        <button id="adminTab" class="btn btn-outline" style="flex: 1;" onclick="showTab('admin')">
+                            Admin Login
+                        </button>
+                    </div>
+
+                    <!-- Customer Login Form -->
+                    <form id="customerLoginForm">
+                        <div class="form-group">
+                            <label for="customerEmail">Email</label>
+                            <input 
+                                type="email" 
+                                id="customerEmail" 
+                                name="email" 
+                                required
+                                autocomplete="email"
+                                placeholder="Enter your email"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customerPassword">Password</label>
+                            <input 
+                                type="password" 
+                                id="customerPassword" 
+                                name="password" 
+                                required
+                                autocomplete="current-password"
+                                placeholder="Enter your password"
+                            >
+                        </div>
+
+                        <!-- Error Message -->
+                        <div id="errorMessage" class="hidden" style="padding: 1rem; background-color: var(--danger-light); color: var(--danger-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
+                            <span id="errorText"></span>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary" style="width: 100%;" id="loginBtn">
+                            Sign In
+                        </button>
+
+                        <div style="margin-top: 1.5rem; text-align: center;">
+                            <p style="color: var(--text-secondary); font-size: 0.875rem;">
+                                Don't have an account? <a href="/static/signup.html" style="color: var(--primary-color); font-weight: 500;">Sign up</a>
+                            </p>
+                        </div>
+                    </form>
+
+                    <!-- Admin Login Form (Hidden by default) -->
+                    <form id="adminLoginForm" class="hidden">
+                        <div class="form-group">
+                            <label for="adminUsername">Username</label>
+                            <input 
+                                type="text" 
+                                id="adminUsername" 
+                                name="username" 
+                                required
+                                autocomplete="username"
+                                placeholder="Enter admin username"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="adminPassword">Password</label>
+                            <input 
+                                type="password" 
+                                id="adminPassword" 
+                                name="password" 
+                                required
+                                autocomplete="current-password"
+                                placeholder="Enter admin password"
+                            >
+                        </div>
+
+                        <!-- Error Message -->
+                        <div id="adminErrorMessage" class="hidden" style="padding: 1rem; background-color: var(--danger-light); color: var(--danger-color); border-radius: var(--radius-sm); margin-bottom: 1rem;">
+                            <span id="adminErrorText"></span>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary" style="width: 100%;" id="adminLoginBtn">
+                            Sign In as Admin
+                        </button>
+
+                        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color); text-align: center; color: var(--text-secondary); font-size: 0.875rem;">
+                            <p>Default admin credentials:</p>
+                            <p style="margin-top: 0.5rem;">
+                                <strong>Username:</strong> admin<br>
+                                <strong>Password:</strong> admin123
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="/static/js/login.js"></script>
+</body>
+</html>

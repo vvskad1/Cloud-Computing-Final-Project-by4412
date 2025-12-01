@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portal - FixIt Tech Solutions</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <style>
+        .notification-badge {
+            background-color: var(--danger-color);
+            color: white;
+            border-radius: 50%;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        .notification-item {
+            padding: 1rem;
+            border-left: 3px solid var(--primary-color);
+            margin-bottom: 0.75rem;
+            background-color: var(--bg-white);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .notification-item:hover {
+            background-color: var(--bg-light);
+        }
+        .notification-item.unread {
+            background-color: var(--primary-light);
+            border-left-color: var(--primary-color);
+        }
+        .notification-item.read {
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <div class="nav-brand">
+                <a href="/static/customer-portal.html" style="text-decoration: none; color: inherit; font-size: 1.5rem; font-weight: 600;">🔧 FixIt Tech Solutions</a>
+            </div>
+            <div style="display: flex; align-items: center; gap: 2rem;">
+                <div class="nav-links">
+                    <a href="/static/customer-portal.html" class="active">My Portal</a>
+                    <a href="/static/new-booking.html">Book Repair</a>
+                    <a href="#" onclick="showSection('notifications'); return false;" style="position: relative;">
+                        Notifications
+                        <span id="notificationBadge" class="hidden" style="position: absolute; top: -8px; right: -10px; background-color: var(--danger-color); color: white; border-radius: 50%; padding: 2px 6px; font-size: 0.75rem; font-weight: 700;">0</span>
+                    </a>
+                </div>
+                <div id="customerInfo"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <section style="padding: 3rem 0; background-color: var(--bg-light); min-height: calc(100vh - 80px);">
+        <div class="container">
+            <!-- Welcome Section -->
+            <div style="margin-bottom: 2rem;">
+                <h1 id="welcomeMessage">My Portal</h1>
+                <p style="color: var(--text-secondary);">Manage your repair tickets and view notifications</p>
+            </div>
+
+            <!-- Stats Cards -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+                <div class="card" style="text-align: center; padding: 2rem;">
+                    <div style="font-size: 2rem; font-weight: 700; color: var(--primary-color);" id="totalTicketsCount">0</div>
+                    <div style="color: var(--text-secondary); margin-top: 0.5rem;">Total Tickets</div>
+                </div>
+                <div class="card" style="text-align: center; padding: 2rem;">
+                    <div style="font-size: 2rem; font-weight: 700; color: var(--warning-color);" id="activeTicketsCount">0</div>
+                    <div style="color: var(--text-secondary); margin-top: 0.5rem;">Active Tickets</div>
+                </div>
+                <div class="card" style="text-align: center; padding: 2rem;">
+                    <div style="font-size: 2rem; font-weight: 700; color: var(--success-color);" id="completedTicketsCount">0</div>
+                    <div style="color: var(--text-secondary); margin-top: 0.5rem;">Completed</div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 2rem;">
+                <button id="ticketsTab" class="btn btn-primary" onclick="showSection('tickets')">
+                    My Tickets
+                </button>
+                <button id="notificationsTab" class="btn btn-outline" onclick="showSection('notifications')">
+                    Notifications
+                </button>
+            </div>
+
+            <!-- Tickets Section -->
+            <div id="ticketsSection" class="card">
+                <h2 style="margin-bottom: 1.5rem;">My Repair Tickets</h2>
+                <div id="ticketsContainer">
+                    <p style="text-align: center; color: var(--text-secondary); padding: 2rem;">Loading tickets...</p>
+                </div>
+            </div>
+
+            <!-- Notifications Section -->
+            <div id="notificationsSection" class="card hidden">
+                <h2 style="margin-bottom: 1.5rem;">Notifications</h2>
+                <div id="notificationsContainer">
+                    <p style="text-align: center; color: var(--text-secondary); padding: 2rem;">Loading notifications...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Chatbot Widget -->
+    <div id="chatbotWidget" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+        <!-- Chat Button -->
+        <button id="chatbotToggle" onclick="toggleChatbot()" style="
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            font-size: 1.5rem;
+            transition: transform 0.2s;
+        " onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+            💬
+        </button>
+
+        <!-- Chat Window -->
+        <div id="chatbotWindow" style="
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 350px;
+            height: 500px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        ">
+            <!-- Chat Header -->
+            <div style="
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                color: white;
+                padding: 1rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            ">
+                <div>
+                    <h3 style="margin: 0; font-size: 1.1rem;">🤖 Support Assistant</h3>
+                    <p style="margin: 0; font-size: 0.8rem; opacity: 0.9;">Ask me anything</p>
+                </div>
+                <button onclick="toggleChatbot()" style="
+                    background: rgba(255,255,255,0.2);
+                    border: none;
+                    color: white;
+                    width: 30px;
+                    height: 30px;
+                    border-radius: 50%;
+                    cursor: pointer;
+                    font-size: 1.2rem;
+                ">×</button>
+            </div>
+
+            <!-- Chat Messages -->
+            <div id="chatMessages" style="
+                flex: 1;
+                overflow-y: auto;
+                padding: 1rem;
+                background: #f5f7fa;
+            ">
+                <div class="chat-message bot-message" style="margin-bottom: 1rem;">
+                    <div style="
+                        background: white;
+                        padding: 0.75rem;
+                        border-radius: 10px;
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+                    ">
+                        <p style="margin: 0; font-size: 0.9rem;">👋 Hi! I'm your support assistant. How can I help you today?</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Input -->
+            <div style="
+                padding: 1rem;
+                background: white;
+                border-top: 1px solid #e0e0e0;
+            ">
+                <div style="display: flex; gap: 0.5rem;">
+                    <input 
+                        type="text" 
+                        id="chatInput" 
+                        placeholder="Type your message..."
+                        style="
+                            flex: 1;
+                            padding: 0.75rem;
+                            border: 1px solid #e0e0e0;
+                            border-radius: 20px;
+                            outline: none;
+                        "
+                        onkeypress="if(event.key==='Enter') sendChatMessage()"
+                    >
+                    <button onclick="sendChatMessage()" style="
+                        background: linear-gradient(135deg, #667eea, #764ba2);
+                        color: white;
+                        border: none;
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 50%;
+                        cursor: pointer;
+                        font-size: 1.2rem;
+                    ">➤</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/customer-portal.js"></script>
+</body>
+</html>
