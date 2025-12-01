@@ -1,6 +1,5 @@
 # FixIt Tech Solutions - Python Dependencies
-# Phase 1: Backend Skeleton
-# Phase 2: Database & CRUD Operations
+# CS 623 - Cloud Computing Final Project
 
 # FastAPI Framework
 fastapi==0.104.1
@@ -8,20 +7,31 @@ fastapi==0.104.1
 # ASGI Server
 uvicorn[standard]==0.24.0
 
+# Production WSGI Server
+gunicorn==21.2.0
+
 # Data validation and settings
-pydantic==2.5.0
+pydantic==2.12.5
 pydantic-settings==2.1.0
 email-validator==2.1.0
 
 # Date/time utilities
 python-dateutil==2.8.2
 
-# Phase 2: Database ORM and drivers
+# Database ORM and drivers
 sqlalchemy==2.0.36
 alembic==1.14.0
 
-# For future phases (commented out for now)
-# psycopg2-binary==2.9.9    # PostgreSQL driver (optional, for production)
-# python-multipart==0.0.6   # Phase 5: Form data handling
-# aiosmtplib==3.0.1         # Phase 6: Email notifications
-# httpx==0.25.2             # Phase 7: HTTP client for external APIs
+# PostgreSQL driver (for production AWS RDS)
+psycopg2-binary==2.9.9
+
+# Authentication
+python-jose[cryptography]==3.5.0
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1
+
+# Environment variables
+python-dotenv==1.2.1
+
+# AI Chatbot
+groq==0.36.0
