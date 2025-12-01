@@ -213,7 +213,7 @@ async function viewTicketDetail(ticketId) {
                         <strong>Updated:</strong> ${formatDate(ticket.updated_at)}
                     </div>
                     <div>
-                        <strong>Estimated Cost:</strong> $${ticket.estimated_cost.toFixed(2)}
+                        <strong>Estimated Cost:</strong> ${ticket.estimated_cost ? '$' + ticket.estimated_cost.toFixed(2) : 'TBD'}
                     </div>
                 </div>
                 

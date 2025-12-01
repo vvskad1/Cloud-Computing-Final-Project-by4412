@@ -5,6 +5,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update navbar based on login status
     updateNavbar();
     
+    // Auto-fill customer information if logged in
+    autoFillCustomerInfo();
+    
     const form = document.getElementById('bookingForm');
     const successMessage = document.getElementById('successMessage');
     const errorMessage = document.getElementById('errorMessage');
@@ -137,6 +140,26 @@ function updateNavbar() {
             <a href="/static/login.html">Login</a>
         `;
         userInfo.innerHTML = '';
+    }
+}
+
+// Auto-fill customer information if logged in
+function autoFillCustomerInfo() {
+    const customerName = localStorage.getItem('customer_name');
+    const customerEmail = localStorage.getItem('customer_email');
+    
+    if (customerName && customerEmail) {
+        // Fill the form fields
+        document.getElementById('customerName').value = customerName;
+        document.getElementById('customerEmail').value = customerEmail;
+        
+        // Make fields readonly
+        document.getElementById('customerName').readOnly = true;
+        document.getElementById('customerEmail').readOnly = true;
+        
+        // Add visual indicator that fields are auto-filled
+        document.getElementById('customerName').style.backgroundColor = '#f0f0f0';
+        document.getElementById('customerEmail').style.backgroundColor = '#f0f0f0';
     }
 }
 
